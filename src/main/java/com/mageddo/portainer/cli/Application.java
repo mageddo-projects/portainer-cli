@@ -1,11 +1,14 @@
 package com.mageddo.portainer.cli;
 
-import com.mageddo.portainercli.config.ApplicationContextUtils;
-import io.micronaut.runtime.Micronaut;
+import com.mageddo.portainer.cli.command.PortainerCommand;
 
 public class Application {
 
 	public static void main(String[] args) {
-		ApplicationContextUtils.context(Micronaut.run(Application.class));
+
+		PortainerCommand.parseAndRun(
+			"stack-deploy", "--auth-token", "465d4a654d6a4d6adas"
+		);
+
 	}
 }
