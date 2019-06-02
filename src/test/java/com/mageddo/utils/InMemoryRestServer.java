@@ -2,7 +2,6 @@ package com.mageddo.utils;
 
 import io.undertow.Undertow;
 import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
-import org.jboss.resteasy.core.ResteasyDeploymentImpl;
 import org.jboss.resteasy.plugins.server.undertow.UndertowJaxrsServer;
 import org.jboss.resteasy.spi.ResteasyDeployment;
 import org.junit.rules.ExternalResource;
@@ -57,7 +56,7 @@ public class InMemoryRestServer extends ExternalResource {
 	protected void before() throws Throwable {
 		port = findFreePort();
 		server = new UndertowJaxrsServer().start(Undertow.builder().addHttpListener(port, HOST));
-		ResteasyDeployment deployment = new ResteasyDeploymentImpl();
+		ResteasyDeployment deployment = new ResteasyDeployment();
 		deployment.setDeploymentSensitiveFactoryEnabled(true);
 		if(application == null){
 			deployment.setApplication(new Application(){

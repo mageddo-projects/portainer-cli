@@ -3,6 +3,7 @@ package com.mageddo.portainer.cli.config;
 import com.oracle.svm.core.annotate.AutomaticFeature;
 import org.graalvm.nativeimage.Feature;
 import org.graalvm.nativeimage.RuntimeReflection;
+import org.jboss.resteasy.plugins.providers.DocumentProvider;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
@@ -30,7 +31,7 @@ class ReflectionClasses implements Feature {
 	static Class<?>[] getClasses(){
 		return new Class[]{
 			Statement[].class,
-//			FruitEntity.class
+			DocumentProvider.class
 		};
 	}
 
