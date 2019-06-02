@@ -5,6 +5,7 @@ buildscript {
 }
 plugins {
 	id "java"
+	id "application"
 	id "com.palantir.graal" version "0.3.0-2-g6c49b4d"
 	id "com.mageddo.graal-reflection-configuration-generator" version "2.0.1"
 }
@@ -20,13 +21,10 @@ targetCompatibility = JavaVersion.VERSION_1_8
 
 def className = "com.mageddo.portainer.cli.Application"
 
+mainClassName = className
+
 task debug(type: JavaExec){
 	debug = true
-	classpath = sourceSets.main.runtimeClasspath
-	main = className
-}
-
-task run(type: JavaExec){
 	classpath = sourceSets.main.runtimeClasspath
 	main = className
 }
