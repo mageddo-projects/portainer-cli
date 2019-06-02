@@ -2,19 +2,29 @@ package com.mageddo.portainer.cli.command;
 
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.Parameters;
-import com.mageddo.common.resteasy.RestEasy;
+import com.mageddo.portainer.cli.service.PortainerStackService;
+import com.mageddo.portainer.cli.utils.EnvUtils;
+import org.apache.commons.lang3.StringUtils;
+
+import java.nio.file.Paths;
 
 @Parameters(commandDescription = "Deploy the stack to docker cluster")
 public class PortainerStackDeployCommand implements Command {
 
-	@Parameter(names = "--auth-token", required = true)
+	private final PortainerStackService portainerStackService;
+
+	@Parameter(names = "--auth-token")
 	private String authToken;
 
-	@Parameter(names = {"--stack-name", "-s"})
+	@Parameter(names = {"--stack-name", "-s"}, required = true)
 	private String stackName;
 
 	@Parameter
 	private String stackFile = "docker-compose.yml";
+
+	public PortainerStackDeployCommand(PortainerStackService portainerStackService) {
+		this.portainerStackService = portainerStackService;
+	}
 
 	@Override
 	public String name() {
@@ -24,7 +34,10 @@ public class PortainerStackDeployCommand implements Command {
 	@Override
 	public void run() {
 		System.out.println("stack deploy: " + this);
-//		RestEasy.newClient()
+		if(StringUtils.isNotBlank(authToken)){
+			EnvUtils.setAuthToken(authToken);
+		}
+		portainerStackService.createOrUpdateStack(stackName, Paths.get(stackFile));
 	}
 
 	@Override

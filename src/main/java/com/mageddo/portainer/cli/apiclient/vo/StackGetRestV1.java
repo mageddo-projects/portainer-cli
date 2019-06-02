@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class StackGetResultV1 {
+public class StackGetRestV1 {
 
 	private Long id;
 	private String name;
@@ -14,7 +14,7 @@ public class StackGetResultV1 {
 	}
 
 	@JsonSetter("Id")
-	public StackGetResultV1 setId(Long id) {
+	public StackGetRestV1 setId(Long id) {
 		this.id = id;
 		return this;
 	}
@@ -24,7 +24,7 @@ public class StackGetResultV1 {
 	}
 
 	@JsonSetter("Name")
-	public StackGetResultV1 setName(String name) {
+	public StackGetRestV1 setName(String name) {
 		this.name = name;
 		return this;
 	}
