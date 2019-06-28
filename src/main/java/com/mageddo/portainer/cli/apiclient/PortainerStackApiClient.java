@@ -1,5 +1,6 @@
 package com.mageddo.portainer.cli.apiclient;
 
+import com.mageddo.portainer.cli.apiclient.vo.RequestRes;
 import com.mageddo.portainer.cli.apiclient.vo.StackCreateReqV1;
 import com.mageddo.portainer.cli.apiclient.vo.StackGetRestV1;
 import com.mageddo.portainer.cli.apiclient.vo.StackUpdateReqV1;
@@ -42,13 +43,17 @@ public class PortainerStackApiClient {
 		);
 	}
 
-	public void updateStack(StackUpdateReqV1 updateReqV1){
-		webTarget
+	public RequestRes updateStack(StackUpdateReqV1 updateReqV1){
+		Response res = webTarget
 			.path("/api/stacks/")
 			.path(String.valueOf(updateReqV1.getId()))
 			.queryParam("endpointId", 1)
 			.request(MediaType.APPLICATION_JSON_TYPE)
-			.post(Entity.json(updateReqV1))
-		;
+			.put(Entity.json(updateReqV1));
+		final String body = res.readEntity(String.class);
+		Validate.isTrue(
+			res.getStatusInfo().toEnum() == Response.Status.OK, body
+		);
+		return RequestRes.valueOf(res, body);
 	}
 }

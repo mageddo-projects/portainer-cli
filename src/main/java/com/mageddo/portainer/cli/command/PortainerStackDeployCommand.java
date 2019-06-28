@@ -8,6 +8,7 @@ import com.mageddo.portainer.cli.apiclient.PortainerAuthenticationFilter;
 import com.mageddo.portainer.cli.apiclient.PortainerStackApiClient;
 import com.mageddo.portainer.cli.service.PortainerStackService;
 import com.mageddo.portainer.cli.utils.EnvUtils;
+import com.mageddo.portainer.cli.vo.DockerStackDeploy;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.ws.rs.client.Client;
@@ -30,6 +31,9 @@ public class PortainerStackDeployCommand implements Command {
 
 	@Parameter(names = {"-s", "--stack-name"}, required = true)
 	private String stackName;
+
+	@Parameter(names = {"--prune"}, description = "If must for inexistent services pruning on the stack")
+	private boolean prune;
 
 	@Parameter(description = "stack file or stack file content")
 	private String stack = "docker-compose.yml";
@@ -62,9 +66,14 @@ public class PortainerStackDeployCommand implements Command {
 		}
 
 		if(stack.endsWith(".yml") || stack.endsWith(".yaml")){
-			portainerStackService.createOrUpdateStack(stackName, Paths.get(stack));
+			portainerStackService.createOrUpdateStack(this.stackName, Paths.get(this.stack), this.prune);
 		} else {
-			portainerStackService.createOrUpdateStack(stackName, stack);
+			portainerStackService.createOrUpdateStack(
+				new DockerStackDeploy()
+					.setName(this.stackName)
+					.setStackFileContent(this.stack)
+					.setPrune(this.prune)
+			);
 		}
 	}
 

@@ -1,9 +1,11 @@
 package com.mageddo.portainer.cli.service;
 
 import com.mageddo.portainer.cli.apiclient.PortainerStackApiClient;
+import com.mageddo.portainer.cli.apiclient.vo.RequestRes;
 import com.mageddo.portainer.cli.apiclient.vo.StackCreateReqV1;
 import com.mageddo.portainer.cli.apiclient.vo.StackUpdateReqV1;
 import com.mageddo.portainer.cli.vo.DockerStack;
+import com.mageddo.portainer.cli.vo.DockerStackDeploy;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,30 +39,29 @@ public class PortainerStackService {
 		;
 	}
 
-	public void createOrUpdateStack(String name, Path stackFile){
+	public void createOrUpdateStack(String name, Path stackFile, boolean prune){
 		try {
-			createOrUpdateStack(name, IOUtils.toString(Files.newInputStream(stackFile), StandardCharsets.UTF_8));
+			createOrUpdateStack(
+				new DockerStackDeploy()
+				.setName(name)
+				.setStackFileContent(IOUtils.toString(Files.newInputStream(stackFile), StandardCharsets.UTF_8))
+				.setPrune(prune)
+			);
 		} catch (IOException e) {
 			throw new UncheckedIOException(e);
 		}
 	}
 
-	public void createOrUpdateStack(String name, String stackFileContent){
-		final DockerStack dockerStack = findDockerStack(name);
+	public void createOrUpdateStack(DockerStackDeploy dockerStackDeploy){
+		final DockerStack dockerStack = findDockerStack(dockerStackDeploy.getName());
 		if(dockerStack == null){
 			logger.debug("status=creating-stack");
-			portainerStackApiClient.createStack(
-				new StackCreateReqV1()
-				.setName(name)
-				.setStackFileContent(stackFileContent)
-			);
+			portainerStackApiClient.createStack(StackCreateReqV1.valueOf(dockerStackDeploy));
 		} else {
-			logger.debug("status=updating-stack");
-			portainerStackApiClient.updateStack(
-				new StackUpdateReqV1()
-				.setStackFileContent(stackFileContent)
-				.setId(dockerStack.getId())
-			);
+			final RequestRes res = portainerStackApiClient.updateStack(StackUpdateReqV1.valueOf(
+				dockerStackDeploy, dockerStack.getId()
+			));
+			logger.debug("status=updating-stack, res={}", res);
 		}
 	}
 }

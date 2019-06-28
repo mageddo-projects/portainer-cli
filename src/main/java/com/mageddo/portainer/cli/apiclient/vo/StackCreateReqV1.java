@@ -1,11 +1,19 @@
 package com.mageddo.portainer.cli.apiclient.vo;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
+import com.mageddo.portainer.cli.vo.DockerStackDeploy;
 
 public class StackCreateReqV1 {
 
 	private String name;
 	private String stackFileContent;
+
+	public static StackCreateReqV1 valueOf(DockerStackDeploy dockerStackDeploy) {
+		return new StackCreateReqV1()
+			.setName(dockerStackDeploy.getName())
+			.setStackFileContent(dockerStackDeploy.getStackFileContent())
+		;
+	}
 
 	@JsonGetter("Name")
 	public String getName() {
