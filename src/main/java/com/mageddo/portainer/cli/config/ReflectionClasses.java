@@ -1,13 +1,13 @@
 package com.mageddo.portainer.cli.config;
 
 import com.oracle.svm.core.annotate.AutomaticFeature;
-import org.graalvm.nativeimage.Feature;
-import org.graalvm.nativeimage.RuntimeReflection;
-import org.jboss.resteasy.plugins.providers.DocumentProvider;
+import org.graalvm.nativeimage.hosted.Feature;
+import org.graalvm.nativeimage.hosted.RuntimeReflection;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.sql.Statement;
+import java.util.Arrays;
 
 @AutomaticFeature
 class ReflectionClasses implements Feature {
@@ -30,8 +30,7 @@ class ReflectionClasses implements Feature {
 	 */
 	static Class<?>[] getClasses(){
 		return new Class[]{
-			Statement[].class,
-			DocumentProvider.class
+			Statement[].class
 		};
 	}
 
@@ -63,7 +62,7 @@ class ReflectionClasses implements Feature {
 				RuntimeReflection.register(method);
 			}
 			for (final Constructor<?> constructor : clazz.getDeclaredConstructors()) {
-				System.out.println("\t> constructor: " + constructor.getName() + "(" + constructor.getParameterCount() + ")");
+				System.out.println("\t> constructor: " + constructor.getName() + "(" + Arrays.toString(constructor.getParameterTypes()) + ")");
 				RuntimeReflection.register(constructor);
 			}
 		} catch (Exception e){
