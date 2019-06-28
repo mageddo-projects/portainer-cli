@@ -19,7 +19,7 @@ public class PortainerAuthApiClient {
 
 	public String doAuth(String username, String password){
 		final Response res = webTarget
-			.path("/auth")
+			.path("/api/auth")
 			.request(MediaType.APPLICATION_JSON_TYPE)
 			.post(Entity.json(
 				new AuthReqV1()

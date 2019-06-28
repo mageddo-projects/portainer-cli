@@ -4,11 +4,9 @@
 $ ./gradlew clean nativeImage
 ```
 
-### Usage
+### Developing
 
 ```bash
-./portainer-cli deploy --auth-token eyJhbGciOi... [docker-compose.yml]
-
-stack-deploy -s reverse-proxy /tmp/web.yml
-
+echo $'version: \'3\'\nservices:\n  web:\n    image: nginx' > /tmp/stack.yml &&\
+./gradlew run --debug-jvm --args "stack-deploy -u admin -p 12345678 -s reverse-proxy /tmp/stack.yml"
 ```

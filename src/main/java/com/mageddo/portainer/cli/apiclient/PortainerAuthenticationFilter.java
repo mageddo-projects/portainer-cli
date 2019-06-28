@@ -8,6 +8,7 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import com.mageddo.common.resteasy.RestEasy;
 import com.mageddo.common.resteasy.RestEasyClient;
 import com.mageddo.portainer.cli.utils.EnvUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.ws.rs.client.ClientRequestContext;
 import javax.ws.rs.client.ClientRequestFilter;
@@ -41,6 +42,9 @@ public class PortainerAuthenticationFilter implements ClientRequestFilter {
 	}
 
 	private boolean isTokenExpired(String token) {
+		if(StringUtils.isBlank(token)){
+			return true;
+		}
 		return JWT_VERIFIER
 				.verify(token)
 				.getExpiresAt()

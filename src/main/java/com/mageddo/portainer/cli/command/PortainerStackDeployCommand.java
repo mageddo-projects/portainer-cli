@@ -16,17 +16,17 @@ public class PortainerStackDeployCommand implements Command {
 	@Parameter(names = "--auth-token")
 	private String authToken;
 
-	@Parameter(names = "--username")
+	@Parameter(names = {"-u", "--username"})
 	private String username;
 
-	@Parameter(names = "--password")
+	@Parameter(names = {"-p", "--password"})
 	private String password;
 
-	@Parameter(names = {"--stack-name", "-s"}, required = true)
+	@Parameter(names = {"-s", "--stack-name"}, required = true)
 	private String stackName;
 
-	@Parameter
-	private String stackFile = "docker-compose.yml";
+	@Parameter(description = "stack file or stack file content")
+	private String stack = "docker-compose.yml";
 
 	public PortainerStackDeployCommand(PortainerStackService portainerStackService) {
 		this.portainerStackService = portainerStackService;
@@ -43,17 +43,24 @@ public class PortainerStackDeployCommand implements Command {
 		if(StringUtils.isNotBlank(this.authToken)){
 			EnvUtils.setAuthToken(this.authToken);
 		}
-		EnvUtils.setUsername(this.username);
-		EnvUtils.setPassword(this.password);
 
-		portainerStackService.createOrUpdateStack(stackName, Paths.get(stackFile));
+		if(StringUtils.isNoneBlank(username, password)){
+			EnvUtils.setUsername(this.username);
+			EnvUtils.setPassword(this.password);
+		}
+
+		if(stack.endsWith(".yml") || stack.endsWith(".yaml")){
+			portainerStackService.createOrUpdateStack(stackName, Paths.get(stack));
+		} else {
+			portainerStackService.createOrUpdateStack(stackName, stack);
+		}
 	}
 
 	@Override
 	public String toString() {
 		return "PortainerStackDeployCommand{" +
 			"authToken='" + authToken + '\'' +
-			", stackFile='" + stackFile + '\'' +
+			", stack='" + stack + '\'' +
 			'}';
 	}
 }
