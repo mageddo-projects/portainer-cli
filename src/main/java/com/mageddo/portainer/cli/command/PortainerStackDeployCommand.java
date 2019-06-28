@@ -16,6 +16,12 @@ public class PortainerStackDeployCommand implements Command {
 	@Parameter(names = "--auth-token")
 	private String authToken;
 
+	@Parameter(names = "--username")
+	private String username;
+
+	@Parameter(names = "--password")
+	private String password;
+
 	@Parameter(names = {"--stack-name", "-s"}, required = true)
 	private String stackName;
 
@@ -33,10 +39,13 @@ public class PortainerStackDeployCommand implements Command {
 
 	@Override
 	public void run() {
-		System.out.println("stack deploy: " + this);
-		if(StringUtils.isNotBlank(authToken)){
-			EnvUtils.setAuthToken(authToken);
+
+		if(StringUtils.isNotBlank(this.authToken)){
+			EnvUtils.setAuthToken(this.authToken);
 		}
+		EnvUtils.setUsername(this.username);
+		EnvUtils.setPassword(this.password);
+
 		portainerStackService.createOrUpdateStack(stackName, Paths.get(stackFile));
 	}
 

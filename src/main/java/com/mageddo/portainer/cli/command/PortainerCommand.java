@@ -3,6 +3,7 @@ package com.mageddo.portainer.cli.command;
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameters;
 import com.mageddo.common.resteasy.RestEasy;
+import com.mageddo.portainer.cli.apiclient.PortainerAuthApiClient;
 import com.mageddo.portainer.cli.apiclient.PortainerAuthenticationFilter;
 import com.mageddo.portainer.cli.apiclient.PortainerStackApiClient;
 import com.mageddo.portainer.cli.service.PortainerStackService;
@@ -19,7 +20,11 @@ public class PortainerCommand {
 					new PortainerStackApiClient(
 						RestEasy
 							.newClient(1)
-							.register(PortainerAuthenticationFilter.class)
+							.register(new PortainerAuthenticationFilter(new PortainerAuthApiClient(
+								RestEasy
+									.newClient(1)
+									.target(EnvUtils.getPortainerApiUri())
+							)))
 							.target(EnvUtils.getPortainerApiUri())
 					)
 				)

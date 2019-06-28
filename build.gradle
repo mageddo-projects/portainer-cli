@@ -56,8 +56,8 @@ dependencies {
 	compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.9'
 	compile group: 'commons-io', name: 'commons-io', version: '2.6'
 	compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
-
-
+	compile group: 'com.auth0', name: 'java-jwt', version: '3.8.1'
+	
 	compile('com.mageddo:rsl:1.0.0')
 	annotationProcessor('com.mageddo:rsl-compiler:1.0.1')
 	testAnnotationProcessor('com.mageddo:rsl-compiler:1.0.1')
