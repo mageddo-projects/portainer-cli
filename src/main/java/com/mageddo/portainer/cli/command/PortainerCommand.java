@@ -15,20 +15,7 @@ public class PortainerCommand {
 	public static JCommander buildCommandLine(){
 		final JCommander commander = JCommander.newBuilder()
 			.addCommand(new PortainerCommand())
-			.addCommand("stack-deploy", new PortainerStackDeployCommand(
-				new PortainerStackService(
-					new PortainerStackApiClient(
-						RestEasy
-							.newClient(1)
-							.register(new PortainerAuthenticationFilter(new PortainerAuthApiClient(
-								RestEasy
-									.newClient(1)
-									.target(EnvUtils.getPortainerApiUri())
-							)))
-							.target(EnvUtils.getPortainerApiUri())
-					)
-				)
-			))
+			.addCommand("stack-deploy", new PortainerStackDeployCommand())
 			.build()
 		;
 		return commander;

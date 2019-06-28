@@ -2,17 +2,23 @@ package com.mageddo.portainer.cli.command;
 
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.Parameters;
+import com.mageddo.common.resteasy.RestEasy;
+import com.mageddo.portainer.cli.apiclient.PortainerAuthApiClient;
+import com.mageddo.portainer.cli.apiclient.PortainerAuthenticationFilter;
+import com.mageddo.portainer.cli.apiclient.PortainerStackApiClient;
 import com.mageddo.portainer.cli.service.PortainerStackService;
 import com.mageddo.portainer.cli.utils.EnvUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import javax.ws.rs.client.Client;
 import java.nio.file.Paths;
 
 @Parameters(commandDescription = "Deploy the stack to docker cluster")
 public class PortainerStackDeployCommand implements Command {
 
-	private final PortainerStackService portainerStackService;
-
+	@Parameter(names = {"-k", "--insecure"}, description = "Allow connections to SSL sites without certs ")
+	private boolean insecure;
+	
 	@Parameter(names = "--auth-token")
 	private String authToken;
 
@@ -28,10 +34,6 @@ public class PortainerStackDeployCommand implements Command {
 	@Parameter(description = "stack file or stack file content")
 	private String stack = "docker-compose.yml";
 
-	public PortainerStackDeployCommand(PortainerStackService portainerStackService) {
-		this.portainerStackService = portainerStackService;
-	}
-
 	@Override
 	public String name() {
 		return "deploy";
@@ -39,6 +41,16 @@ public class PortainerStackDeployCommand implements Command {
 
 	@Override
 	public void run() {
+
+		final PortainerStackService portainerStackService = new PortainerStackService(
+			new PortainerStackApiClient(
+				createClient()
+					.register(new PortainerAuthenticationFilter(new PortainerAuthApiClient(
+						createClient().target(EnvUtils.getPortainerApiUri())
+					)))
+					.target(EnvUtils.getPortainerApiUri())
+			)
+		);
 
 		if(StringUtils.isNotBlank(this.authToken)){
 			EnvUtils.setAuthToken(this.authToken);
@@ -54,6 +66,10 @@ public class PortainerStackDeployCommand implements Command {
 		} else {
 			portainerStackService.createOrUpdateStack(stackName, stack);
 		}
+	}
+
+	private Client createClient() {
+		return RestEasy.newClient(1, this.insecure);
 	}
 
 	@Override
