@@ -11,47 +11,48 @@ import java.util.Properties;
 
 public class EnvUtils {
 
+	private static PortainerProp props;
+
 	public static String getPortainerApiUri(){
-		return Optional
-			.ofNullable(System.getenv("PTN_URI"))
-			.orElse("http://localhost:9000")
-		;
+		return getConfigProps().asText("portainer.uri", "http://localhost:9000");
 	}
 
 	public static String getAuthToken() {
-		return Optional
-			.ofNullable(System.getProperty("PTN_AUTH_ENV"))
-			.orElse(System.getenv("PTN_AUTH_TOKEN"))
-		;
+		return getConfigProps().asText("portainer.auth.token");
 	}
 
 	public static void setAuthToken(String authToken) {
-		System.setProperty("PTN_AUTH_ENV", authToken);
+		getConfigProps().put("portainer.auth.token", authToken);
 	}
 
 	public static void setUsername(String username) {
-		System.setProperty("PTN_USERNAME", username);
+		getConfigProps().put("portainer.auth.username", username);
 	}
 
 	public static String getUsername() {
-		return Optional
-			.ofNullable(System.getProperty("PTN_USERNAME"))
-			.orElse(System.getenv("PTN_USERNAME"))
-			;
+		return getConfigProps().asText("portainer.auth.username");
 	}
 
 	public static void setPassword(String password) {
-		System.setProperty("PTN_PASSWORD", password);
+		getConfigProps().put("portainer.auth.password", password);
 	}
 
 	public static String getPassword() {
-		return Optional
-			.ofNullable(System.getProperty("PTN_PASSWORD"))
-			.orElse(System.getenv("PTN_PASSWORD"))
-			;
+		return getConfigProps().asText("portainer.auth.password");
 	}
 
-	public static PortainerProp loadConfigProps(){
+	public static PortainerProp getConfigProps(){
+			if(props != null){
+				return props;
+			}
+			return props = loadConfigProps();
+	}
+
+	public static void clearCache(){
+		props = null;
+	}
+
+	private static PortainerProp loadConfigProps(){
 		return Optional.ofNullable(
 			Optional
 			.ofNullable(loadConfigPropsFromPath())
@@ -62,7 +63,7 @@ public class EnvUtils {
 	}
 
 	public static Path getConfigFilePath() {
-		return getConfigDir().resolve( "portainer-cli.properties");
+		return getConfigDir().resolve("portainer-cli.properties");
 	}
 
 	private static PortainerProp loadConfigPropsFromPath() {

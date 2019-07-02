@@ -23,24 +23,18 @@ public class PortainerProp {
 		this.properties = properties;
 	}
 
-	public String asText(String key, String actual) {
-		return asText(key, actual, null);
+	public String asText(String key){
+		return asText(key, null);
 	}
 
-	public String asText(String key, String actual, String defaultValue){
-		if(StringUtils.isNotBlank(actual)){
-			return actual;
-		}
+	public String asText(String key, String defaultValue){
 		if(StringUtils.isBlank(properties.getProperty(key))){
 			return defaultValue;
 		}
 		return properties.getProperty(key);
 	}
 
-	public boolean asBoolean(String key, Boolean actual, boolean defaultValue){
-		if(actual != null){
-			return actual;
-		}
+	public boolean asBoolean(String key, boolean defaultValue){
 		final String propValue = properties.getProperty(key).toLowerCase();
 		if(StringUtils.isBlank(propValue)){
 			return defaultValue;

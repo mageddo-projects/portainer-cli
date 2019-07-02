@@ -53,7 +53,7 @@ public class PortainerStackDeployCommand implements Command {
 	@Override
 	public void run() {
 
-		setupFromConfig();
+		setupConfig();
 
 		final PortainerStackService portainerStackService = new PortainerStackService(
 			new PortainerStackApiClient(
@@ -64,15 +64,6 @@ public class PortainerStackDeployCommand implements Command {
 					.target(EnvUtils.getPortainerApiUri())
 			)
 		);
-
-		if(StringUtils.isNotBlank(this.authToken)){
-			EnvUtils.setAuthToken(this.authToken);
-		}
-
-		if(StringUtils.isNoneBlank(username, password)){
-			EnvUtils.setUsername(this.username);
-			EnvUtils.setPassword(this.password);
-		}
 
 		if(stack.endsWith(".yml") || stack.endsWith(".yaml")){
 			portainerStackService.createOrUpdateStack(
@@ -93,13 +84,22 @@ public class PortainerStackDeployCommand implements Command {
 		return RestEasy.newClient(1, this.insecure);
 	}
 
-	private void setupFromConfig(){
-		final PortainerProp props = EnvUtils.loadConfigProps();
-		this.insecure = props.asBoolean("stack.deploy.insecure", this.insecure, false);
-		this.authToken = props.asText("stack.deploy.auth.token", this.authToken);
-		this.username = props.asText("stack.deploy.auth.username", this.username, "admin");
-		this.password = props.asText("stack.deploy.auth.password", this.username, "admin");
-		this.stack = props.asText("stack.deploy.stack", this.stack, "docker-compose.yml");
+	private void setupConfig(){
+
+		if(StringUtils.isNotBlank(this.authToken)){
+			EnvUtils.setAuthToken(this.authToken);
+		}
+
+		if(StringUtils.isNoneBlank(username, password)){
+			EnvUtils.setUsername(this.username);
+			EnvUtils.setPassword(this.password);
+		}
+
+		final PortainerProp props = EnvUtils.getConfigProps();
+		if(this.insecure != null){
+			props.put("portainer.uri.insecure", String.valueOf(insecure));
+		}
+
 	}
 
 	@Override

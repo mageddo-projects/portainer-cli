@@ -1,6 +1,6 @@
 package com.mageddo.portainer.cli.utils;
 
-import org.junit.ClassRule;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
@@ -11,18 +11,19 @@ import static org.junit.Assert.assertNotNull;
 
 public class EnvUtilsTest {
 
-	@ClassRule
-	public static TemporaryFolder temporaryFolder = new TemporaryFolder();
+	@Rule
+	public TemporaryFolder temporaryFolder = new TemporaryFolder();
 
 	@Test
 	public void mustLoadPropsFromResources(){
 		
 		// act
-		PortainerProp props = EnvUtils.loadConfigProps();
+		EnvUtils.clearCache();
+		PortainerProp props = EnvUtils.getConfigProps();
 
 		// assert
 		assertNotNull(props);
-		assertEquals("admin", props.asText("stack.deploy.auth.username", " "));
+		assertEquals("admin", props.asText("portainer.auth.username", " "));
 	}
 
 	@Test
@@ -32,16 +33,16 @@ public class EnvUtilsTest {
 		System.setProperty("PTN_CONFIG_DIR", temporaryFolder.getRoot().toPath().toString());
 		final Path configPath = EnvUtils.getConfigFilePath();
 		EnvUtils.loadConfigPropsFromResources()
-			.put("stack.deploy.auth.username", "elvis")
+			.put("portainer.auth.username", "elvis")
 			.store(configPath)
 		;
 
 		// act
-		final PortainerProp props = EnvUtils.loadConfigProps();
+		final PortainerProp props = EnvUtils.getConfigProps();
 
 		// assert
 		assertNotNull(props);
-		assertEquals("elvis", props.asText("stack.deploy.auth.username", " "));
+		assertEquals("elvis", props.asText("portainer.auth.username", " "));
 		System.out.println(configPath);
 	}
 
