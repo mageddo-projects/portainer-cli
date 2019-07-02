@@ -8,17 +8,19 @@ import com.mageddo.portainer.cli.apiclient.PortainerAuthenticationFilter;
 import com.mageddo.portainer.cli.apiclient.PortainerStackApiClient;
 import com.mageddo.portainer.cli.service.PortainerStackService;
 import com.mageddo.portainer.cli.utils.EnvUtils;
+import com.mageddo.portainer.cli.utils.PortainerProp;
 import com.mageddo.portainer.cli.vo.DockerStackDeploy;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.ws.rs.client.Client;
 import java.nio.file.Paths;
+import java.util.Properties;
 
 @Parameters(commandDescription = "Deploy the stack to docker cluster")
 public class PortainerStackDeployCommand implements Command {
 
 	@Parameter(names = {"-k", "--insecure"}, description = "Allow connections to SSL sites without certs ")
-	private boolean insecure;
+	private Boolean insecure;
 	
 	@Parameter(names = "--auth-token")
 	private String authToken;
@@ -45,6 +47,8 @@ public class PortainerStackDeployCommand implements Command {
 
 	@Override
 	public void run() {
+
+		setupFromConfig();
 
 		final PortainerStackService portainerStackService = new PortainerStackService(
 			new PortainerStackApiClient(
@@ -79,6 +83,15 @@ public class PortainerStackDeployCommand implements Command {
 
 	private Client createClient() {
 		return RestEasy.newClient(1, this.insecure);
+	}
+
+	private void setupFromConfig(){
+		final PortainerProp props = EnvUtils.loadConfigProps();
+		this.insecure = props.asBoolean("stack.deploy.insecure", this.insecure, false);
+		this.authToken = props.asText("stack.deploy.auth.token", this.authToken);
+		this.username = props.asText("stack.deploy.auth.username", this.username, "admin");
+		this.password = props.asText("stack.deploy.auth.password", this.username, "admin");
+		this.stack = props.asText("stack.deploy.stack", this.stack, "docker-compose.yml");
 	}
 
 	@Override
