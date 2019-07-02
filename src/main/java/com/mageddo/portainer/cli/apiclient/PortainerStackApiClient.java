@@ -2,6 +2,7 @@ package com.mageddo.portainer.cli.apiclient;
 
 import com.mageddo.portainer.cli.apiclient.vo.RequestRes;
 import com.mageddo.portainer.cli.apiclient.vo.StackCreateReqV1;
+import com.mageddo.portainer.cli.apiclient.vo.StackFileGetResV1;
 import com.mageddo.portainer.cli.apiclient.vo.StackGetRestV1;
 import com.mageddo.portainer.cli.apiclient.vo.StackUpdateReqV1;
 import org.apache.commons.lang3.Validate;
@@ -55,5 +56,15 @@ public class PortainerStackApiClient {
 			res.getStatusInfo().toEnum() == Response.Status.OK, body
 		);
 		return RequestRes.valueOf(res, body);
+	}
+
+	public StackFileGetResV1 findStackContent(long stackId) {
+		return webTarget
+			.path("/api/stacks/")
+			.path(String.valueOf(stackId))
+			.path("/file")
+			.request(MediaType.APPLICATION_JSON_TYPE)
+			.get(StackFileGetResV1.class)
+		;
 	}
 }

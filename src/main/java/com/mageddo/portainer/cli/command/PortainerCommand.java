@@ -10,6 +10,7 @@ public class PortainerCommand {
 		final JCommander commander = new JCommander();
 		commander.addCommand(new PortainerCommand());
 		commander.addCommand("stack-deploy", new PortainerStackDeployCommand());
+		commander.addCommand("stack-run", new PortainerStackRunCommand());
 		return commander;
 	}
 

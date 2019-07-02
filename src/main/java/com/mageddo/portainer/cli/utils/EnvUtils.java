@@ -6,6 +6,7 @@ import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Properties;
 
@@ -53,17 +54,25 @@ public class EnvUtils {
 	}
 
 	private static PortainerProp loadConfigProps(){
-		return Optional.ofNullable(
-			Optional
-			.ofNullable(loadConfigPropsFromPath())
-			.orElse(loadConfigPropsFromResources())
-		)
-		.orElse(new PortainerProp(new Properties()))
-		;
+		final PortainerProp resourceProps = loadConfigPropsFromResources();
+		final PortainerProp pathProps = loadConfigPropsFromPath();
+		if(pathProps == null){
+			return resourceProps;
+		}
+		resourceProps.merge(pathProps);
+		return Objects.requireNonNull(resourceProps, "Default config props not found");
 	}
 
+
 	public static Path getConfigFilePath() {
-		return getConfigDir().resolve("portainer-cli.properties");
+		return getConfigDir().resolve(getConfigFileName());
+	}
+
+	private static String getConfigFileName() {
+		return Optional
+			.ofNullable(System.getenv("PTN_CONFIG_FILE_NAME"))
+			.orElse("portainer-cli.properties")
+		;
 	}
 
 	private static PortainerProp loadConfigPropsFromPath() {

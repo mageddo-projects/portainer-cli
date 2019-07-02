@@ -8,6 +8,7 @@ import com.mageddo.portainer.cli.vo.DockerStack;
 import com.mageddo.portainer.cli.vo.DockerStackDeploy;
 import com.mageddo.portainer.cli.vo.StackEnv;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,6 +37,7 @@ public class PortainerStackService {
 		.map(
 			it -> new DockerStack()
 			.setId(it.getId())
+			.setEnvs(StackEnv.valueOf(it.getEnvs()))
 		)
 		.orElse(null)
 		;
@@ -66,5 +68,24 @@ public class PortainerStackService {
 			));
 			logger.debug("status=updating-stack, stack={}, res={}", dockerStackDeploy.getName(), res);
 		}
+	}
+
+	public void runStack(String stackName, boolean prune, List<StackEnv> envs) {
+		DockerStack dockerStack = findDockerStack(stackName);
+		Validate.notNull(dockerStack, "stack not found", stackName);
+		createOrUpdateStack(
+			new DockerStackDeploy()
+			.setName(stackName)
+			.setStackFileContent(findStackContent(dockerStack.getId()))
+			.setPrune(prune)
+			.setEnvs(StackEnv.merge(dockerStack.getEnvs(), envs))
+		);
+	}
+
+	private String findStackContent(long stackId) {
+		return portainerStackApiClient
+			.findStackContent(stackId)
+			.getStackFileContent()
+		;
 	}
 }

@@ -68,4 +68,7 @@ public class PortainerProp {
 		}
 	}
 
+	public void merge(PortainerProp props) {
+		this.properties.putAll(props.properties);
+	}
 }
