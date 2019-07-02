@@ -113,4 +113,8 @@ public class EnvUtils {
 	public static boolean insecureConnection() {
 		return getConfigProps().asBoolean("portainer.uri.insecure", false);
 	}
+
+	public static void setupEnv() {
+		// TODO SET ON PROPS FROM ENV VARIABLES
+	}
 }

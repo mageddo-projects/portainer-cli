@@ -35,7 +35,7 @@ public class PortainerProp {
 	}
 
 	public boolean asBoolean(String key, boolean defaultValue){
-		final String propValue = properties.getProperty(key).toLowerCase();
+		final String propValue = StringUtils.lowerCase(properties.getProperty(key));
 		if(StringUtils.isBlank(propValue)){
 			return defaultValue;
 		}
@@ -44,6 +44,13 @@ public class PortainerProp {
 
 	public PortainerProp put(String k, String v){
 		this.properties.put(k, v);
+		return this;
+	}
+
+	public PortainerProp putIfNotBlank(String k, String value){
+		if(StringUtils.isNotBlank(value)){
+			this.properties.put(k, value);
+		}
 		return this;
 	}
 

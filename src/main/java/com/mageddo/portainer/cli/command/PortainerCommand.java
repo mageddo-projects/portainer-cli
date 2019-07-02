@@ -2,22 +2,14 @@ package com.mageddo.portainer.cli.command;
 
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameters;
-import com.mageddo.common.resteasy.RestEasy;
-import com.mageddo.portainer.cli.apiclient.PortainerAuthApiClient;
-import com.mageddo.portainer.cli.apiclient.PortainerAuthenticationFilter;
-import com.mageddo.portainer.cli.apiclient.PortainerStackApiClient;
-import com.mageddo.portainer.cli.service.PortainerStackService;
-import com.mageddo.portainer.cli.utils.EnvUtils;
 
 @Parameters(commandNames = "stack-deploy")
 public class PortainerCommand {
 
 	public static JCommander buildCommandLine(){
-		final JCommander commander = JCommander.newBuilder()
-			.addCommand(new PortainerCommand())
-			.addCommand("stack-deploy", new PortainerStackDeployCommand())
-			.build()
-		;
+		final JCommander commander = new JCommander();
+		commander.addCommand(new PortainerCommand());
+		commander.addCommand("stack-deploy", new PortainerStackDeployCommand());
 		return commander;
 	}
 
