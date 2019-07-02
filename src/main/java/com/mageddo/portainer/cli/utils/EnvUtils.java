@@ -79,9 +79,11 @@ public class EnvUtils {
 	}
 
 	private static Path getConfigDir() {
-		return Optional
-			.ofNullable(Paths.get(System.getProperty("PTN_CONFIG_DIR")))
-			.orElse(Paths.get(System.getProperty("user.home"), "/.portainer-cli/"))
+		return Paths.get(
+			Optional
+			.ofNullable(System.getProperty("PTN_CONFIG_DIR"))
+			.orElse(System.getProperty("user.home") + "/.portainer-cli/")
+		)
 		;
 	}
 
@@ -106,5 +108,9 @@ public class EnvUtils {
 		} catch (IOException e) {
 			throw new UncheckedIOException(e);
 		}
+	}
+
+	public static boolean insecureConnection() {
+		return getConfigProps().asBoolean("portainer.uri.insecure", false);
 	}
 }

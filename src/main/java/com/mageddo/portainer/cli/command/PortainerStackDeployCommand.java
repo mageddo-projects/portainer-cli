@@ -81,7 +81,7 @@ public class PortainerStackDeployCommand implements Command {
 	}
 
 	private Client createClient() {
-		return RestEasy.newClient(1, this.insecure);
+		return RestEasy.newClient(1, EnvUtils.insecureConnection());
 	}
 
 	private void setupConfig(){
