@@ -4,16 +4,20 @@ import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.mageddo.portainer.cli.vo.DockerStackDeploy;
 
+import java.util.List;
+
 public class StackUpdateReqV1 {
 
 	private Long id;
 	private String stackFileContent;
 	private boolean prune;
+	private List<StackEnvReqV1> env;
 
 	public static StackUpdateReqV1 valueOf(DockerStackDeploy dockerStackDeploy, Long stackId) {
 		return new StackUpdateReqV1()
-			.setStackFileContent(dockerStackDeploy.getStackFileContent())
 			.setId(stackId)
+			.setStackFileContent(dockerStackDeploy.getStackFileContent())
+			.setEnv(StackEnvReqV1.valueOf(dockerStackDeploy.getEnvs()))
 		;
 	}
 
@@ -44,6 +48,16 @@ public class StackUpdateReqV1 {
 
 	public StackUpdateReqV1 setPrune(boolean prune) {
 		this.prune = prune;
+		return this;
+	}
+
+	public List<StackEnvReqV1> getEnv() {
+		return env;
+	}
+
+	@JsonGetter("Env")
+	public StackUpdateReqV1 setEnv(List<StackEnvReqV1> env) {
+		this.env = env;
 		return this;
 	}
 }

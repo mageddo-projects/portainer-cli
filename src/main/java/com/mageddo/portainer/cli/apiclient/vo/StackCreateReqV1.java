@@ -3,15 +3,19 @@ package com.mageddo.portainer.cli.apiclient.vo;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.mageddo.portainer.cli.vo.DockerStackDeploy;
 
+import java.util.List;
+
 public class StackCreateReqV1 {
 
 	private String name;
 	private String stackFileContent;
+	private List<StackEnvReqV1> env;
 
 	public static StackCreateReqV1 valueOf(DockerStackDeploy dockerStackDeploy) {
 		return new StackCreateReqV1()
 			.setName(dockerStackDeploy.getName())
 			.setStackFileContent(dockerStackDeploy.getStackFileContent())
+			.setEnv(StackEnvReqV1.valueOf(dockerStackDeploy.getEnvs()))
 		;
 	}
 
@@ -37,6 +41,16 @@ public class StackCreateReqV1 {
 
 	public StackCreateReqV1 setStackFileContent(String stackFileContent) {
 		this.stackFileContent = stackFileContent;
+		return this;
+	}
+
+	@JsonGetter("Env")
+	public List<StackEnvReqV1> getEnv() {
+		return env;
+	}
+
+	public StackCreateReqV1 setEnv(List<StackEnvReqV1> env) {
+		this.env = env;
 		return this;
 	}
 }

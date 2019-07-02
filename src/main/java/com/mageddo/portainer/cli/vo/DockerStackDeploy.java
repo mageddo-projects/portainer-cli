@@ -1,10 +1,13 @@
 package com.mageddo.portainer.cli.vo;
 
+import java.util.List;
+
 public class DockerStackDeploy {
 
 	private String name;
 	private String stackFileContent;
 	private boolean prune;
+	private List<StackEnv> envs;
 
 	public String getName() {
 		return name;
@@ -31,5 +34,14 @@ public class DockerStackDeploy {
 	public DockerStackDeploy setPrune(boolean prune) {
 		this.prune = prune;
 		return this;
+	}
+
+	public DockerStackDeploy setEnvs(List<StackEnv> envs) {
+		this.envs = envs;
+		return this;
+	}
+
+	public List<StackEnv> getEnvs() {
+		return envs;
 	}
 }
