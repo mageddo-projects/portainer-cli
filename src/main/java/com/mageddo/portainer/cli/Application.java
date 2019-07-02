@@ -14,6 +14,7 @@ public class Application {
 			System.err.println(e.getMessage());
 		} catch (Exception e){
 			e.printStackTrace();
+			System.exit(1);
 		}
 	}
 }
