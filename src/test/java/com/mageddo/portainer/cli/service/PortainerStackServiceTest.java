@@ -1,7 +1,8 @@
 package com.mageddo.portainer.cli.service;
 
+import com.beust.jcommander.internal.Lists;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.google.common.collect.Lists;
+import com.mageddo.common.jackson.JsonUtils;
 import com.mageddo.portainer.cli.apiclient.PortainerStackApiClient;
 import com.mageddo.portainer.cli.vo.DockerStack;
 import com.mageddo.portainer.cli.vo.DockerStackDeploy;
@@ -72,7 +73,8 @@ public class PortainerStackServiceTest {
 		@Path("/api/stacks")
 		@POST
 		@Consumes(MediaType.APPLICATION_JSON)
-		public Response createStack(JsonNode jsonNode) throws Exception {
+		public Response createStack(String json) throws Exception {
+			JsonNode jsonNode = JsonUtils.readTree(json);
 			if(jsonNode.at("/Name").asText().equals("my-stack-with-envs")){
 				assertEquals("ka", jsonNode.at("/Env/0/name").asText());
 				assertEquals("a", jsonNode.at("/Env/0/value").asText());
