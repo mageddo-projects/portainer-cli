@@ -8,6 +8,7 @@ plugins {
 	id "application"
 	id "com.palantir.graal" version "0.3.0-2-g6c49b4d"
 	id "com.mageddo.graal-reflection-configuration-generator" version "2.0.1"
+	id 'net.researchgate.release' version '2.7.0'
 }
 
 repositories {
@@ -74,6 +75,17 @@ dependencies {
 	testCompile group: 'org.jboss.resteasy', name: 'resteasy-undertow', version: '3.6.2.Final'
 	testCompile "junit:junit:4.12"
 
+}
+
+release {
+	project.ext.set("release.useAutomaticVersion", true)
+	git {
+		requireBranch = ''
+	}
+	failOnCommitNeeded = false
+	failOnPublishNeeded = false
+	failOnUnversionedFiles = false
+	buildTasks = []
 }
 
 nativeImage.dependsOn(tasks.reflectConfigFiles)
