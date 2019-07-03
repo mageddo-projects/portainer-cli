@@ -2,17 +2,12 @@ package com.mageddo.portainer.cli.command;
 
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.Parameters;
-import com.mageddo.common.resteasy.RestEasy;
-import com.mageddo.portainer.cli.apiclient.PortainerAuthApiClient;
-import com.mageddo.portainer.cli.apiclient.PortainerAuthenticationFilter;
-import com.mageddo.portainer.cli.apiclient.PortainerStackApiClient;
 import com.mageddo.portainer.cli.command.converter.EnvConverter;
 import com.mageddo.portainer.cli.service.PortainerStackService;
-import com.mageddo.portainer.cli.utils.EnvUtils;
+import com.mageddo.portainer.cli.utils.BeansFactory;
 import com.mageddo.portainer.cli.vo.DockerStackDeploy;
 import com.mageddo.portainer.cli.vo.StackEnv;
 
-import javax.ws.rs.client.Client;
 import java.nio.file.Paths;
 import java.util.List;
 
@@ -38,17 +33,7 @@ public class PortainerStackDeployCommand implements Command {
 
 	@Override
 	public void run() {
-
-		final PortainerStackService portainerStackService = new PortainerStackService(
-			new PortainerStackApiClient(
-				createClient()
-					.register(new PortainerAuthenticationFilter(new PortainerAuthApiClient(
-						createClient().target(EnvUtils.getPortainerApiUri())
-					)))
-					.target(EnvUtils.getPortainerApiUri())
-			)
-		);
-
+		final PortainerStackService portainerStackService = BeansFactory.newStackService();
 		if(stack.endsWith(".yml") || stack.endsWith(".yaml")){
 			portainerStackService.createOrUpdateStack(
 				this.stackName, Paths.get(this.stack), this.prune, this.envs
@@ -62,10 +47,6 @@ public class PortainerStackDeployCommand implements Command {
 					.setEnvs(this.envs)
 			);
 		}
-	}
-
-	private Client createClient() {
-		return RestEasy.newClient(1, EnvUtils.insecureConnection());
 	}
 
 	@Override
