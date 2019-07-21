@@ -3,8 +3,8 @@ package com.mageddo.portainer.cli.command;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.Parameters;
 import com.mageddo.portainer.cli.command.converter.EnvConverter;
-import com.mageddo.portainer.cli.utils.BeansFactory;
-import com.mageddo.portainer.cli.vo.StackEnv;
+import com.mageddo.portainer.client.utils.BeansFactory;
+import com.mageddo.portainer.client.vo.StackEnv;
 
 import java.util.List;
 

@@ -1,7 +1,7 @@
 package com.mageddo.portainer.cli.command.converter;
 
 import com.beust.jcommander.IStringConverter;
-import com.mageddo.portainer.cli.vo.StackEnv;
+import com.mageddo.portainer.client.vo.StackEnv;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 
