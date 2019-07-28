@@ -41,10 +41,11 @@ graal {
 	option("-H:+AllowVMInspection")
 	option("-H:+ReportUnsupportedElementsAtRuntime")
 	option("-H:EnableURLProtocols=https")
-	option("-Dfile.encoding=UTF-8")
+	option("-H:+AddAllCharsets")
 	option("--no-server")
 	option("-J-Xms1G")
 	option("-J-Xmx3G")
+	option("-Dfile.encoding=UTF-8")
 }
 
 dependencies {

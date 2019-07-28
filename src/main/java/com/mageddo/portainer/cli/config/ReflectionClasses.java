@@ -1,6 +1,8 @@
 package com.mageddo.portainer.cli.config;
 
+import com.beust.jcommander.validators.NoValidator;
 import com.beust.jcommander.validators.NoValueValidator;
+import com.beust.jcommander.validators.PositiveInteger;
 import com.fasterxml.jackson.databind.ext.Java7SupportImpl;
 import com.mageddo.common.graalvm.SubstrateVM;
 import com.mageddo.portainer.cli.command.PortainerStackDeployCommand;
@@ -36,6 +38,8 @@ class ReflectionClasses implements Feature {
 		SubstrateVM
 			.builder()
 			.clazz(NoValueValidator.class)
+			.clazz(NoValidator.class)
+			.clazz(PositiveInteger.class)
 			.constructors()
 			.build()
 		;
