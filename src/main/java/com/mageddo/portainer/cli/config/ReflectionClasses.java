@@ -22,7 +22,7 @@ class ReflectionClasses implements Feature {
 
 	@Override
 	public void beforeAnalysis(BeforeAnalysisAccess access) {
-
+		SubstrateVM.supressWarnings();
 		SubstrateVM.process(ArrayList.class, Java7SupportImpl.class);
 
 		SubstrateVM

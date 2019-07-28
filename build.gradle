@@ -42,6 +42,8 @@ graal {
 	option("-H:+ReportUnsupportedElementsAtRuntime")
 	option("-H:EnableURLProtocols=https")
 	option("-H:+AddAllCharsets")
+	option("-H:+ReportExceptionStackTraces")
+	option("--initialize-at-build-time=com.mageddo.common.graalvm.NopLogHandler")
 	option("--no-server")
 	option("-J-Xms1G")
 	option("-J-Xmx3G")
