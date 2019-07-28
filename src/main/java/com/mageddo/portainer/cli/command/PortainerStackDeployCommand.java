@@ -9,6 +9,7 @@ import com.mageddo.portainer.client.vo.DockerStackDeploy;
 import com.mageddo.portainer.client.vo.StackEnv;
 
 import java.nio.file.Paths;
+import java.util.Collections;
 import java.util.List;
 
 @Parameters(commandDescription = "Deploy the stack to docker cluster")
@@ -24,11 +25,16 @@ public class PortainerStackDeployCommand implements Command {
 	private List<StackEnv> envs;
 
 	@Parameter(description = "stack file or stack file content")
-	private String stack = "docker-compose.yml";
+	private String stack;
 
 	@Override
 	public String name() {
 		return "deploy";
+	}
+
+	public PortainerStackDeployCommand() {
+		this.envs = Collections.emptyList();
+		this.stack = "docker-compose.yml";
 	}
 
 	@Override
