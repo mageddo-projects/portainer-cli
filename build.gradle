@@ -51,7 +51,7 @@ graal {
 dependencies {
 
 	compile group: 'com.beust', name: 'jcommander', version: '1.72'
-	compile group: 'com.mageddo.portainer', name: 'portainer-client', version: '1.1.0'
+	compile group: 'com.mageddo.portainer', name: 'portainer-client', version: '1.2.0'
 	compile "ch.qos.logback:logback-classic:1.2.3"
 	
 	compile('com.mageddo:rsl:1.0.0')
