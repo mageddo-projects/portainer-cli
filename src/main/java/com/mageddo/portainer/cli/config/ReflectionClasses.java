@@ -1,5 +1,6 @@
 package com.mageddo.portainer.cli.config;
 
+import com.beust.jcommander.converters.CommaParameterSplitter;
 import com.beust.jcommander.validators.NoValidator;
 import com.beust.jcommander.validators.NoValueValidator;
 import com.beust.jcommander.validators.PositiveInteger;
@@ -7,6 +8,7 @@ import com.fasterxml.jackson.databind.ext.Java7SupportImpl;
 import com.mageddo.common.graalvm.SubstrateVM;
 import com.mageddo.portainer.cli.command.PortainerStackDeployCommand;
 import com.mageddo.portainer.cli.command.PortainerStackRunCommand;
+import com.mageddo.portainer.cli.command.converter.EnvConverter;
 import com.oracle.svm.core.annotate.AutomaticFeature;
 import org.graalvm.nativeimage.hosted.Feature;
 
@@ -40,6 +42,8 @@ class ReflectionClasses implements Feature {
 			.clazz(NoValueValidator.class)
 			.clazz(NoValidator.class)
 			.clazz(PositiveInteger.class)
+			.clazz(CommaParameterSplitter.class)
+			.clazz(EnvConverter.class)
 			.constructors()
 			.build()
 		;
