@@ -6,6 +6,7 @@ import com.mageddo.portainer.cli.command.converter.EnvConverter;
 import com.mageddo.portainer.client.utils.BeansFactory;
 import com.mageddo.portainer.client.vo.StackEnv;
 
+import java.util.Collections;
 import java.util.List;
 
 @Parameters(commandDescription = "Run a existing stack updating the specified environments")
@@ -19,6 +20,10 @@ public class PortainerStackRunCommand implements Command {
 
 	@Parameter(required = true)
 	private String stackName;
+
+	public PortainerStackRunCommand() {
+		this.envs = Collections.emptyList();
+	}
 
 	@Override
 	public String name() {
