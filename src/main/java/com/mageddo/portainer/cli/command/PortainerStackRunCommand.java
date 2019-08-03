@@ -35,7 +35,7 @@ public class PortainerStackRunCommand implements Command {
 
 	@Override
 	public String name() {
-		return "deploy";
+		return "run";
 	}
 
 	@Override

@@ -1,5 +1,6 @@
 package com.mageddo.portainer.cli.config;
 
+import com.beust.jcommander.converters.BooleanConverter;
 import com.beust.jcommander.converters.CommaParameterSplitter;
 import com.beust.jcommander.validators.NoValidator;
 import com.beust.jcommander.validators.NoValueValidator;
@@ -44,6 +45,7 @@ class ReflectionClasses implements Feature {
 			.clazz(PositiveInteger.class)
 			.clazz(CommaParameterSplitter.class)
 			.clazz(EnvConverter.class)
+			.clazz(BooleanConverter.class)
 			.constructors()
 			.build()
 		;
