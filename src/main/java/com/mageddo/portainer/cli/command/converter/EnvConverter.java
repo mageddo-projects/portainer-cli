@@ -9,7 +9,7 @@ public class EnvConverter implements IStringConverter<StackEnv> {
 	@Override
 	public StackEnv convert(String value) {
 		Validate.isTrue(StringUtils.isNotBlank(value), "Invalid env");
-		String[] values = value.split("=");
+		String[] values = value.split("(?<=\\w)=");
 		if(values.length == 1){
 			return new StackEnv(values[0]);
 		}
