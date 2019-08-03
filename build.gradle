@@ -1,3 +1,5 @@
+import java.nio.file.Paths
+
 buildscript {
 	repositories {
 		mavenLocal()
@@ -82,4 +84,21 @@ release {
 	buildTasks = []
 }
 
+
+task copyStatics() {
+	doLast {
+
+		def binFilePath = "${project.buildDir}/graal/"
+		def distPath = Paths.get("${buildDir}/distributions/")
+
+		/**
+		 * Create a distribution file
+		 */
+		ant.zip(destfile: "${distPath}/${project.name}-linux-adm64-${project.version}.zip"){
+			zipfileset("dir": binFilePath)
+		}
+	}
+}
+
 nativeImage.dependsOn(tasks.reflectConfigFiles)
+nativeImage.finalizedBy(tasks.copyStatics)
