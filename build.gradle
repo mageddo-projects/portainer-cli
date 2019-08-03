@@ -53,10 +53,9 @@ graal {
 dependencies {
 
 	compile group: 'com.beust', name: 'jcommander', version: '1.72'
-	compile group: 'com.mageddo.portainer', name: 'portainer-client', version: '2.1.0'
+	compile group: 'com.mageddo.portainer', name: 'portainer-client', version: '2.2.0'
 	compile(group: 'com.mageddo', name: 'commons', version: '1.5.0')
-	compile "ch.qos.logback:logback-classic:1.2.3"
-	
+
 	compile('com.mageddo:rsl:1.0.0')
 	annotationProcessor('com.mageddo:rsl-compiler:1.0.1')
 	testAnnotationProcessor('com.mageddo:rsl-compiler:1.0.1')

@@ -3,6 +3,7 @@ package com.mageddo.portainer.cli.command;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.Parameters;
 import com.mageddo.portainer.cli.command.converter.EnvConverter;
+import com.mageddo.portainer.client.service.PortainerStackService;
 import com.mageddo.portainer.client.utils.BeansFactory;
 import com.mageddo.portainer.client.vo.StackEnv;
 
@@ -18,6 +19,13 @@ public class PortainerStackRunCommand implements Command {
 	@Parameter(names = {"-e", "--env"}, converter = EnvConverter.class)
 	private List<StackEnv> envs;
 
+	@Parameter(
+		names = "--clone-services",
+		description = "Run stack cloning existent services this way you can run the same service multiple times in parallel, " +
+		"useful when you are using the stack as a task runner"
+	)
+	private boolean cloneServices;
+
 	@Parameter(required = true)
 	private String stackName;
 
@@ -32,7 +40,12 @@ public class PortainerStackRunCommand implements Command {
 
 	@Override
 	public void run() {
-		BeansFactory.newStackService().runStack(stackName, prune, envs);
+		final PortainerStackService service = BeansFactory.newStackService();
+		if(cloneServices){
+			service.runStackClonningServices(stackName, this.prune, envs);
+		} else {
+			service.runStack(stackName, this.prune, envs);
+		}
 	}
 
 	@Override
