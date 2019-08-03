@@ -85,20 +85,14 @@ release {
 }
 
 
-task copyStatics() {
-	doLast {
+def binFilePath = "${project.buildDir}/graal/"
 
-		def binFilePath = "${project.buildDir}/graal/"
-		def distPath = Paths.get("${buildDir}/distributions/")
-
-		/**
-		 * Create a distribution file
-		 */
-		ant.zip(destfile: "${distPath}/${project.name}-linux-amd64-${project.version}.zip"){
-			zipfileset("dir": binFilePath)
-		}
-	}
+task zipBinaryFile(type: Zip) {
+	from("${binFilePath}")
+	include('*')
+	include('*/*')
+	archiveFileName = "${project.name}-linux-amd64-${project.version}.zip"
 }
 
 nativeImage.dependsOn(tasks.reflectConfigFiles)
-nativeImage.finalizedBy(tasks.copyStatics)
+nativeImage.finalizedBy(tasks.zipBinaryFile)
