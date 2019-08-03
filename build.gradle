@@ -94,7 +94,7 @@ task copyStatics() {
 		/**
 		 * Create a distribution file
 		 */
-		ant.zip(destfile: "${distPath}/${project.name}-linux-adm64-${project.version}.zip"){
+		ant.zip(destfile: "${distPath}/${project.name}-linux-amd64-${project.version}.zip"){
 			zipfileset("dir": binFilePath)
 		}
 	}
